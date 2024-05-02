@@ -1,0 +1,20 @@
+{
+	"name": "web-editor-text-tools",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"typescript": "^5.2.2",
+		"vite": "^5.2.10"
+	},
+	"dependencies": {
+		"@hediet/semantic-json": "^0.4.2",
+		"@vscode/web-editors": "https://microsoft.github.io/vscode-web-editors/vscode-web-editors.tgz",
+		"monaco-editor": "^0.48.0"
+	}
+}

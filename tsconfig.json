@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"target": "ES2022",
+		"moduleResolution": "Bundler",
+		"jsx": "react",
+		"useDefineForClassFields": false,
+		"experimentalDecorators": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"exactOptionalPropertyTypes": false,
+		"useUnknownInCatchVariables": false,
+		"strict": true,
+		"sourceMap": true,
+		"paths": {
+			"vs/*": ["./deps/vscode/src/vs/*"]
+		},
+		"noEmit": true,
+		"skipLibCheck": true
+	},
+	"include": ["./src/**/*"],
+	"exclude": ["node_modules", "**/node_modules/*", "deps/*", "deps"]
+}
