@@ -1,3 +1,4 @@
+import ReactDOM from "react-dom/client";
 import { h } from "vs/base/browser/dom";
 import { Disposable, IDisposable } from "vs/base/common/lifecycle";
 import { appendRemoveOnDispose } from "vs/editor/browser/widget/diffEditor/utils";
@@ -77,3 +78,17 @@ export class DynamicDelegatingComponent extends Component {
     get maximumWidth() { return this._underlyingComponent?.maximumWidth ?? 0; }
 }
 
+export class ReactComponent extends Component {
+    element: HTMLElement = document.createElement("div");
+
+    constructor(content: React.ReactNode) {
+        super();
+        ReactDOM.createRoot(this.element).render(content);
+        this.element.style.display = 'contents';
+    }
+
+    layout(width: number, height: number): void {
+        this.element.style.width = `${width}px`;
+        this.element.style.height = `${height}px`;
+    }
+}

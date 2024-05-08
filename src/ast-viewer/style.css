@@ -1,17 +1,3 @@
-html,
-body,
-#app {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-}
-
-body {
-	font-size: 14px;
-	font-family: Segoe WPC, Segoe UI, sans-serif;
-}
-
-
 .selected-node {
 	background-color: yellow;
 }

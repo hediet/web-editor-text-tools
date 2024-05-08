@@ -1,13 +1,10 @@
 .selectedRange {
-    background-color: color-mix(in srgb, var(--vscode-button-background) 20%, transparent);
+    background-color: var(--vscode-inputValidation-errorBackground);
+
 }
 
 .selectedRange.empty {
-    background-color: color-mix(in srgb, var(--vscode-button-background) 50%, transparent);
+    background-color: var(--vscode-inputValidation-errorBorder);
     transform: translateX(2px);
     width: 4px !important;
-}
-
-.selected-text {
-    background-color: transparent !important;
 }
