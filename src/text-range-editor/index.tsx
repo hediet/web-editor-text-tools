@@ -1,7 +1,7 @@
-import { createJsonWebEditorClient, vNumber, vObj, vString } from "@vscode/web-editors";
+import { createJsonWebEditorClient, vNumber, vObj, vString, vUndefined, vUnion } from "@vscode/web-editors";
 import React, { CSSProperties } from "react";
 import { KeyCode } from "vs/base/common/keyCodes";
-import { IReader, autorun, derived, observableFromEvent, observableSignal, observableValue, transaction } from "vs/base/common/observable";
+import { IReader, ObservablePromise, autorun, derived, observableFromEvent, observableFromPromise, observableSignal, observableValue, transaction } from "vs/base/common/observable";
 import { obsCodeEditor } from "vs/editor/browser/observableUtilities";
 import { Range } from "vs/editor/common/core/range";
 import { IModelDeltaDecoration } from "vs/editor/common/model";
@@ -26,6 +26,7 @@ class TextRangeEditorModel extends Disposable {
     public readonly textModel = createModel('test');
     public readonly selection = observableValue<Range>(this, new Range(1, 1, 1, 1));
     public readonly text = observableFromEvent(e => this.textModel.onDidChangeContent(e), () => this.textModel.getValue());
+    public readonly comment = observableValue<string | undefined>(this, undefined);
 
     public readonly selectionChangedFromOutside = observableSignal(this);
 
@@ -33,6 +34,7 @@ class TextRangeEditorModel extends Disposable {
         vObj({
             text: vString(),
             range: vRange,
+            comment: vUnion(vString(), vUndefined()),
         }),
         data => {
             transaction(tx => {
@@ -44,9 +46,13 @@ class TextRangeEditorModel extends Disposable {
                     data.range.end.column,
                 ), tx);
                 this.selectionChangedFromOutside.trigger(tx);
+                this.comment.set(data.comment, tx);
             });
         }
     ));
+
+    public readonly state = new ObservablePromise(this.client?.onDidConnect.then(c => true) ?? Promise.resolve(false)).promiseResult
+        .map(r => !r ? 'connecting' : r.data ? 'connected' : 'disconnected');
 
     constructor() {
         super();
@@ -66,6 +72,7 @@ class TextRangeEditorModel extends Disposable {
                             column: selection.endColumn,
                         },
                     },
+                    comment: this.comment.read(reader),
                 });
             }));
         }
@@ -82,12 +89,18 @@ export class TextRangeEditorApp extends ObservableComponent {
 
 class TextRangeEditorView extends ObservableComponent<{ model: TextRangeEditorModel }> {
     override renderObs(reader: IReader): React.ReactNode {
+        const m = this.props.model;
+        if (m.state.read(reader) === 'connecting') {
+            return;
+        }
+        const comment = m.comment.read(reader);
         return <div style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ margin: '10px', color: 'grey', display: 'flex' }}>
-                <div>Selection: {this.props.model.selection.read(reader).toString()}</div>
-                <div style={{ marginLeft: 'auto' }}>Hold <i>ctrl</i> and select text to change</div>
+            <div className="header" style={{ display: 'flex' }}>
+                {comment ? <div className="comment">{comment}</div> : undefined}
+                <div style={{ marginLeft: 'auto' }}>Selection: {m.selection.read(reader).toString()}</div>
+                <div>Hold <i>ctrl</i> and select text to change</div>
             </div>
-            <EditorComponent model={this.props.model} />
+            <EditorComponent model={m} />
         </div>;
     }
 }
