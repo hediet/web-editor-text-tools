@@ -8,3 +8,17 @@
     transform: translateX(2px);
     width: 4px !important;
 }
+
+.comment {
+    color: var(--vscode-editor-foreground);
+}
+
+.header {
+    background-color: var(--vscode-list-dropBackground);
+    padding: 10px;
+    color: gray;
+}
+
+.header>div {
+    margin: 0px 10px;
+}
