@@ -1,12 +1,16 @@
 .selectedRange {
-    background-color: var(--vscode-inputValidation-errorBackground);
-
+    background-color: var(--vscode-diffEditor-removedTextBackground);
 }
 
 .selectedRange.empty {
     background-color: var(--vscode-inputValidation-errorBorder);
     transform: translateX(2px);
-    width: 4px !important;
+    width: 2px !important;
+}
+
+.selectedRangeBackground {
+    background-color: var(--vscode-diffEditor-removedLineBackground);
+    opacity: 0.5;
 }
 
 .comment {
