@@ -97,7 +97,7 @@ class TextRangeEditorView extends ObservableComponent<{ model: TextRangeEditorMo
         return <div style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className="header" style={{ display: 'flex' }}>
                 {comment ? <div className="comment">{comment}</div> : undefined}
-                <div style={{ marginLeft: 'auto' }}>Selection: {m.selection.read(reader).toString()}</div>
+                <div style={{ marginLeft: comment ? 'auto' : undefined, marginRight: !comment ? 'auto' : undefined }}>Selection: {m.selection.read(reader).toString()}</div>
                 <div>Hold <i>ctrl</i> and select text to change</div>
             </div>
             <EditorComponent model={m} />
