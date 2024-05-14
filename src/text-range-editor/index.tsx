@@ -133,16 +133,20 @@ class EditorComponent extends ObservableComponent<{ model: TextRangeEditorModel,
                     shouldFillLineOnLineBreak: true,
                     showIfCollapsed: true,
                 }
+            }, {
+                range: selection,
+                options: {
+                    description: 'selection',
+                    className: 'selectedRangeBackground',
+                    isWholeLine: true,
+                    showIfCollapsed: true,
+                }
             }] satisfies IModelDeltaDecoration[];
         })));
 
-        let first = true;
         this._store.add(autorun(reader => {
             this.props.model.selectionChangedFromOutside.read(reader);
-            if (!first) {
-                this.editor.revealRangeInCenterIfOutsideViewport(this.props.model.selection.get());
-            }
-            first = false;
+            this.editor.revealRangeInCenterIfOutsideViewport(this.props.model.selection.get());
         }))
 
         let ctrlDown = false;
