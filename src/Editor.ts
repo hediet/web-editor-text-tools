@@ -35,7 +35,7 @@ function applyDecorations(src: IObservable<ISource>, editor: ICodeEditor): IDisp
         let cssVal = '';
         const ruleCache = new CachedFunction((color: string) => {
             // add css rule
-            cssVal += `.decoration-${color} { background-color: ${color}; }`;
+            cssVal += `.decoration-${color} { background-color: ${color}; opacity: 0.5; }`;
             return `.decoration-${color}`;
         });
 

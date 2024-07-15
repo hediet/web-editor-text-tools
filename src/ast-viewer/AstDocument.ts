@@ -1,7 +1,7 @@
 import { Editor, ISource } from "../Editor";
 import { ITreeNodeData, TreeComponent } from "../ListView";
 import { HorizontalSplitView } from "../components/HorizontalSplitView";
-import { IObservable, autorun, autorunWithStore, constObservable, observableFromEvent } from "vs/base/common/observable";
+import { IObservable, autorun, autorunWithStore, constObservable, observableFromEvent, observableValue } from "vs/base/common/observable";
 import { DelegatingComponent } from "../components/Component";
 import { Range } from "vs/editor/common/core/range";
 import { IModelDeltaDecoration } from "vs/editor/common/model";
@@ -26,11 +26,19 @@ export class AstComponent extends DelegatingComponent {
 
         super(new HorizontalSplitView(tree, editor));
 
-
-        //const selectedElements = observableFromEvent(tree.tree.onDidChangeSelection, e => e?.elements ?? tree.tree.getSelection());
         const focusedElements = observableFromEvent(tree.tree.onDidChangeFocus, e => e?.elements ?? [])
 
-        //tree.tree.setFocus();
+        const selectedNode = observableValue<AstTreeNode | null>(this, null);
+
+        let lastSelectedNode: AstTreeNode | null = null;
+        this._register(autorun(reader => {
+            const node = selectedNode.read(reader);
+            if (lastSelectedNode) {
+                lastSelectedNode.classNames.set('', undefined);
+            }
+            node?.classNames.set('selected', undefined);
+            lastSelectedNode = node;
+        }));
 
         this._register(editor.editor.onDidChangeCursorPosition(e => {
             const pos = e.position;
@@ -40,15 +48,18 @@ export class AstComponent extends DelegatingComponent {
             }
 
             const n = tree.getNode(node);
-            tree.tree.setSelection([n ?? null]);
+            tree.tree.reveal(n ?? null);
+            selectedNode.set(node, undefined);
             updateSelection([{ data: node }]);
-            //tree.tree.setFocus([n ?? null]);
         }));
 
         const c = editor.editor.createDecorationsCollection();
 
-        function updateSelection(elems: readonly (TreeItem<AstTreeNode> | null)[]) {
+        function updateSelection(elems: readonly ({ data: AstTreeNode } | null)[]) {
             let range: Range | undefined = undefined;
+            if (elems[0]) {
+                selectedNode.set(elems[0].data, undefined);
+            }
             c.set(elems.map<IModelDeltaDecoration | null>(e => {
                 if (!e) { return null; }
                 if (!e.data.astNode.range) { return null! }
@@ -114,6 +125,8 @@ function getClassName(normalizedScore: number) {
 
 class AstTreeNode implements ITreeNodeData<AstTreeNode> {
     public readonly children: AstTreeNode[] | undefined;
+
+    public readonly classNames = observableValue<string>(this, '');
 
     constructor(public readonly astNode: AstNode) {
         this.children = astNode.children?.map(c => new AstTreeNode(c));

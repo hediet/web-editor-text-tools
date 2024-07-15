@@ -74,8 +74,6 @@ export class AstViewer extends Disposable {
           return typeof source === 'string' ? { value: source, decorations: [] } : { value: source.value, decorations: source.decorations.map(d => ({ ...d, range: normalizeRange(d.range, t) })) };
         }
       }));
-
-
   }
 }
 
