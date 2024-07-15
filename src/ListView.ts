@@ -2,12 +2,13 @@ import { h } from "vs/base/browser/dom";
 import { IconLabel } from "vs/base/browser/ui/iconLabel/iconLabel";
 import { IListStyles } from "vs/base/browser/ui/list/listWidget";
 import { RenderIndentGuides } from "vs/base/browser/ui/tree/abstractTree";
-import { IObservable, autorun } from "vs/base/common/observable";
+import { IObservable, autorun, observableValue } from "vs/base/common/observable";
 import { listFocusBackground, listFocusForeground, listFocusOutline, listActiveSelectionBackground, listActiveSelectionForeground, listActiveSelectionIconForeground, listFocusAndSelectionOutline, listInactiveSelectionBackground, listInactiveSelectionIconForeground, listInactiveSelectionForeground, listInactiveFocusBackground, listInactiveFocusOutline, listHoverBackground, listHoverForeground, listDropOverBackground, listDropBetweenBackground, activeContrastBorder, treeIndentGuidesStroke, treeInactiveIndentGuidesStroke, tableColumnsBorder, tableOddRowsBackgroundColor } from "vs/platform/theme/common/colorRegistry";
 import { asCssVariable } from "vs/platform/theme/common/colorUtils";
 import { Component } from "./components/Component";
 import { ObjectTree } from "vs/base/browser/ui/tree/objectTree";
 import { IObjectTreeElement, ITreeNode, ITreeRenderer, ObjectTreeElementCollapseState } from "vs/base/browser/ui/tree/tree";
+import { Disposable } from "./utils/disposable";
 
 export class TreeComponent<TNode extends ITreeNodeData<TNode>> extends Component {
     override readonly element = h('div').root;
@@ -101,6 +102,7 @@ export interface ITreeNodeData<T extends ITreeNodeData<T>> {
     codicon: string | undefined;
     segment?: string;
     isMarked?: boolean;
+    classNames: IObservable<string>;
     children?: T[];
 }
 
@@ -122,19 +124,32 @@ class Renderer implements ITreeRenderer<TreeItem, void, Template> {
         }
 
         templateData._iconLabel.setLabel(element.element.label, '', { extraClasses });
+        templateData.data.set(element.element, undefined);
     }
 
     disposeElement(element: ITreeNode<TreeItem>, index: number, templateData: Template, height: number | undefined): void {
+        templateData.data.set(undefined, undefined);
     }
 
     disposeTemplate(templateData: Template): void {
+        templateData.dispose();
     }
 }
-class Template {
+class Template extends Disposable {
     public readonly _iconLabel: IconLabel;
 
+    public readonly data = observableValue<TreeItem | undefined>(this, undefined);
+
     constructor(public readonly element: HTMLElement) {
+        super();
+
         this._iconLabel = new IconLabel(this.element, {});
+
+        this._register(autorun(reader => {
+            const item = this.data.read(reader);
+            const classNames = item?.data.classNames.read(reader) ?? '';
+            this.element.className = 'monaco-tl-contents ' + classNames;
+        }));
     }
 }
 

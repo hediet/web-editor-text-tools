@@ -18,7 +18,11 @@ export abstract class ObservableComponent<TProps = {}> extends React.Component<T
     }
 
     componentWillUnmount(): void {
-        this._store.clear();
+        try {
+            this._store.clear();
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     render() { return this._result.get(); }
