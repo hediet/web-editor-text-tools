@@ -9,8 +9,22 @@ import {
     sString,
     sUnion
 } from "@hediet/semantic-json";
-import { visualizationNs } from "./ns";
+import { nsMonacoUtils } from "./ns";
 import { TextRangeShape, sTextRange } from "./textRange";
+
+export const sMapping = sOpenObject({
+    original: sTextRange,
+    modified: sTextRange,
+}).defineAs(nsMonacoUtils("TextMapping"));
+
+export const sDocument = sUnion([sString(), sOpenObject({
+    value: sString(),
+    decorations: sArrayOf(sOpenObject({
+        range: sTextRange,
+        color: sString(),
+    })),
+})]);
+
 
 export interface AstNode {
     label: string;
@@ -31,28 +45,15 @@ export const sAstNode: Serializer<AstNode> = sLazy(() =>
         range: optionalProp(sTextRange),
         heatMapScore: optionalProp(sNumber()),
         children: optionalProp(sArrayOf(sAstNode)),
-    }).defineAs(visualizationNs("AstTreeNode"))
+    }).defineAs(nsMonacoUtils("AstTreeNode"))
 );
-
-export const sMapping = sOpenObject({
-    original: sTextRange,
-    modified: sTextRange,
-}).defineAs(visualizationNs("TextMapping"));
-
-export const sDoc = sUnion([sString(), sOpenObject({
-    value: sString(),
-    decorations: sArrayOf(sOpenObject({
-        range: sTextRange,
-        color: sString(),
-    })),
-})]);
 
 export const sAstDocument = sOpenObject({
     root: sAstNode,
-    source: sDoc,
-    modified: optionalProp(sDoc),
-    original: optionalProp(sDoc),
+    source: sDocument,
+    modified: optionalProp(sDocument),
+    original: optionalProp(sDocument),
     mappings: optionalProp(sArrayOf(sMapping)),
 
     fileName: optionalProp(sString()),
-}).defineAs(visualizationNs("AstTreeVisualizationData"));
+}).defineAs(nsMonacoUtils("AstTreeVisualizationData"));
