@@ -1,25 +1,23 @@
-import { JSONValue } from "@hediet/semantic-json";
 import { createJsonWebEditorClient, } from "@vscode/web-editors";
-import { DisposableStore } from "vs/base/common/lifecycle";
+import React, { ReactNode } from "react";
+import "vs/base/browser/ui/codicons/codicon/codicon.css";
 import { IReader, observableValue } from "vs/base/common/observable";
 import { Position } from "vs/editor/common/core/position";
 import { PositionOffsetTransformer } from "vs/editor/common/core/positionToOffset";
 import { Range } from "vs/editor/common/core/range";
 import { RangeMapping } from "vs/editor/common/diff/rangeMapping";
-import { AstComponent, AstDocument, AstNode } from "./AstDocument";
-import { ISource } from "../Editor";
-import { DynamicSizedComponent } from "../components/DynamicSizedComponent";
-import "./style.css";
-import "../vscode.css";
-import { sAstDocument, sAstNode, sDoc } from "./types/astData";
-import { TextPositionShape, TextRangeShape } from "./types/textRange";
-import "vs/base/browser/ui/codicons/codicon/codicon.css";
 import "vs/editor/editor.all";
-import { validatorFromType } from "../utils/validatorFromType";
-import { Disposable } from "../utils/disposable";
+import { ISource } from "../Editor";
 import { ObservableComponent } from "../ObservableComponent";
-import { ReactNode } from "react";
-import React from "react";
+import { DynamicSizedComponent } from "../components/DynamicSizedComponent";
+import { sDocument } from "../editor/schemas/inputs";
+import { Disposable } from "../utils/disposable";
+import { validatorFromType } from "../utils/validatorFromType";
+import "../vscode.css";
+import { AstComponent, AstDocument, AstNode } from "./AstDocument";
+import "./style.css";
+import { sAstDocument, sAstNode } from "./types/astData";
+import { TextPositionShape, TextRangeShape } from "./types/textRange";
 
 export class AstViewerApp extends ObservableComponent {
   override renderObs(reader: IReader): ReactNode {
@@ -70,7 +68,7 @@ export class AstViewer extends Disposable {
           this._register(new DynamicSizedComponent(this.element, new AstComponent(this._data as any)));
         }
 
-        function normalizeSource(source: typeof sDoc['T'], t: PositionOffsetTransformer): ISource {
+        function normalizeSource(source: typeof sDocument['T'], t: PositionOffsetTransformer): ISource {
           return typeof source === 'string' ? { value: source, decorations: [] } : { value: source.value, decorations: source.decorations.map(d => ({ ...d, range: normalizeRange(d.range, t) })) };
         }
       }));

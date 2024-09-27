@@ -1,0 +1,17 @@
+.selected-node {
+	background-color: rgba(255, 255, 0, 0.2);
+}
+
+.monaco-tl-row:has(> .monaco-tl-contents > .marked) {
+	background: lime;
+}
+
+
+.monaco-list-row {
+	border-left: transparent 2px solid;
+	margin-left: 2px;
+}
+
+.monaco-list-row:has(> .monaco-tl-row > .selected) {
+	border-left: black 2px solid;
+}
