@@ -19,5 +19,5 @@
 		"skipLibCheck": true
 	},
 	"include": ["./src/**/*", "deps/*", "deps"],
-	"exclude": ["node_modules", "**/node_modules/*"] //, "deps/*", "deps"]
+	"exclude": ["node_modules", "**/node_modules/*"]//, "deps/*", "deps"]
 }

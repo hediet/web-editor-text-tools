@@ -1,5 +1,5 @@
-import { Editor, ISource } from "../Editor";
-import { ITreeNodeData, TreeComponent } from "../ListView";
+import { Editor, ISource } from "./Editor";
+import { ITreeNodeData, TreeComponent } from "../components/ListView";
 import { HorizontalSplitView } from "../components/HorizontalSplitView";
 import { IObservable, autorun, autorunWithStore, constObservable, observableFromEvent, observableValue } from "vs/base/common/observable";
 import { DelegatingComponent } from "../components/Component";

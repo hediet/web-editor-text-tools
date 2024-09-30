@@ -7,7 +7,7 @@ import { DiffEditorViewModel } from "vs/editor/browser/widget/diffEditor/diffEdi
 import { Range } from "vs/editor/common/core/range";
 import { lineRangeMappingFromRangeMappings } from "vs/editor/common/diff/defaultLinesDiffComputer/defaultLinesDiffComputer";
 import { RangeMapping } from "vs/editor/common/diff/rangeMapping";
-import { Component } from "./components/Component";
+import { Component } from "../components/Component";
 import { editor } from "vs/editor/editor.api";
 
 export interface ISource {
