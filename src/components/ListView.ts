@@ -5,10 +5,10 @@ import { RenderIndentGuides } from "vs/base/browser/ui/tree/abstractTree";
 import { IObservable, autorun, observableValue } from "vs/base/common/observable";
 import { listFocusBackground, listFocusForeground, listFocusOutline, listActiveSelectionBackground, listActiveSelectionForeground, listActiveSelectionIconForeground, listFocusAndSelectionOutline, listInactiveSelectionBackground, listInactiveSelectionIconForeground, listInactiveSelectionForeground, listInactiveFocusBackground, listInactiveFocusOutline, listHoverBackground, listHoverForeground, listDropOverBackground, listDropBetweenBackground, activeContrastBorder, treeIndentGuidesStroke, treeInactiveIndentGuidesStroke, tableColumnsBorder, tableOddRowsBackgroundColor } from "vs/platform/theme/common/colorRegistry";
 import { asCssVariable } from "vs/platform/theme/common/colorUtils";
-import { Component } from "./components/Component";
+import { Component } from "./Component";
 import { ObjectTree } from "vs/base/browser/ui/tree/objectTree";
 import { IObjectTreeElement, ITreeNode, ITreeRenderer, ObjectTreeElementCollapseState } from "vs/base/browser/ui/tree/tree";
-import { Disposable } from "./utils/disposable";
+import { Disposable } from "../utils/disposable";
 
 export class TreeComponent<TNode extends ITreeNodeData<TNode>> extends Component {
     override readonly element = h('div').root;

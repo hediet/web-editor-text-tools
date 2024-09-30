@@ -7,7 +7,7 @@ import { Range } from "vs/editor/common/core/range";
 import { IModelDeltaDecoration } from "vs/editor/common/model";
 import { IStandaloneCodeEditor } from "vs/editor/standalone/browser/standaloneCodeEditor";
 import { create, createModel } from 'vs/editor/standalone/browser/standaloneEditor';
-import { ObservableComponent } from "../ObservableComponent";
+import { ObservableComponent } from "../components/ObservableComponent";
 import "./style.css";
 import { Disposable } from "../utils/disposable";
 

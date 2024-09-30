@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IReader, derived } from "vs/base/common/observable";
-import { DisposableStore } from "vs/base/common/lifecycle";
+import { DisposableStore, IDisposable } from "vs/base/common/lifecycle";
 
 export abstract class ObservableComponent<TProps = {}> extends React.Component<TProps> {
     protected _store = new DisposableStore();
@@ -28,4 +28,11 @@ export abstract class ObservableComponent<TProps = {}> extends React.Component<T
     render() { return this._result.get(); }
 
     abstract renderObs(reader: IReader): React.ReactNode;
+
+    protected _register<T extends IDisposable | undefined>(disposable: T): T {
+        if (disposable) {
+            this._store.add(disposable);
+        }
+        return disposable;
+    }
 }

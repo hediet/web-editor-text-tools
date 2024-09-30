@@ -7,8 +7,8 @@ import { PositionOffsetTransformer } from "vs/editor/common/core/positionToOffse
 import { Range } from "vs/editor/common/core/range";
 import { RangeMapping } from "vs/editor/common/diff/rangeMapping";
 import "vs/editor/editor.all";
-import { ISource } from "../Editor";
-import { ObservableComponent } from "../ObservableComponent";
+import { ISource } from "./Editor";
+import { ObservableComponent } from "../components/ObservableComponent";
 import { DynamicSizedComponent } from "../components/DynamicSizedComponent";
 import { sDocument } from "../editor/schemas/inputs";
 import { Disposable } from "../utils/disposable";
