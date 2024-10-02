@@ -1,0 +1,17 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+            "name": "Debug Active Web Editor Document",
+            "request": "launch",
+            "type": "chrome",
+            "url": "${input:debugUrl}",
+            "webRoot": "${workspaceFolder}"
+        }
+	],
+    "inputs": [{
+        "type": "command",
+        "id": "debugUrl",
+        "command": "web-editors.getWebEditorUrlForActiveDocument"
+    }]
+}

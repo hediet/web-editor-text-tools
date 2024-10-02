@@ -1,0 +1,11 @@
+{
+	"workbench.editorAssociations": {
+		"*.w.json": "default"
+	},
+	"web-editors.editorTypes": {
+		"ast.w.json": "http://localhost:8080/?editor=ast-viewer",
+		"selection.w.json": "http://localhost:8080/?editor=selection-editor",
+		"diff.w.json": "http://localhost:8080/?editor=diff",
+		"text.w.json": "http://localhost:8080/?editor=text"
+	}
+}
